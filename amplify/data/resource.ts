@@ -2,6 +2,7 @@ import { a, defineData, type ClientSchema } from '@aws-amplify/backend';
 
 const schema = a.schema({
   Course: a.model({
+    id: a.id().required(),
     name: a.string().required(),
     department: a.string().required(),
     code: a.string().required(),
@@ -9,10 +10,13 @@ const schema = a.schema({
     professor: a.string().required(),
     color: a.string().required(),
     colorSource: a.string().required(),
-    owner: a.string().authorization(allow => [allow.owner().to(['read', 'delete'])]),
+    
+    owner: a.string().authorization(
+      allow => [allow.owner().to(['read', 'delete'])]),
   }).authorization(allow => [allow.owner()]),
 
   Event: a.model({
+    id: a.id().required(),
     title: a.string().required(),
     type: a.string().required(),
     date: a.date().required(),
@@ -21,7 +25,8 @@ const schema = a.schema({
     // Keep this optional for general events. The frontend verifies that a
     // chosen course is accessible to the current user before creating an event.
     courseId: a.id(),
-    owner: a.string().authorization(allow => [allow.owner().to(['read', 'delete'])]),
+    owner: a.string().authorization(
+      allow => [allow.owner().to(['read', 'delete'])]),
   }).authorization(allow => [allow.owner()]),
 });
 
