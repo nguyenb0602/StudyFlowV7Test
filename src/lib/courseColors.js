@@ -21,7 +21,6 @@ export function unusedCourseColor(courses) {
     const color = `hsl(${hue} 65% 43%)`;
     if (!used.has(color.toLowerCase())) return color;
   }
-  // Practically unreachable unless there are hundreds of courses.
   return '#334155';
 }
 

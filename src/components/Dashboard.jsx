@@ -84,7 +84,7 @@ export default function Dashboard({ user, onLogout }) {
     setActionError('');
     const editing = courses.some(course => course.id === draft.id);
     const next = saveCourseRecord(courses, draft).find(course => course.id === draft.id);
-    // Keep the form open if AWS reports an error; the form displays it.
+    // Keeps the form open if AWS reports an error; the form displays it.
     await plannerRepository.saveCourse(next, editing);
     setDialog(null);
   }

@@ -1,8 +1,5 @@
 import { saveCourseRecord } from './plannerUpdates.js';
 
-// Explicit migration of old v5 browser records to the *signed-in* cloud
-// account. Never runs without the user's consent. Safe to retry after a
-// partial failure because records already present with these IDs are skipped.
 export async function importLegacyPlannerData({ legacy, courses, events, repository }) {
   const knownCourseIds = new Set(courses.map(course => course.id));
   const knownEventIds = new Set(events.map(event => event.id));
