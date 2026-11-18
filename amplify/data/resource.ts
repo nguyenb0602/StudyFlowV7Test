@@ -1,4 +1,5 @@
 import { a, defineData, type ClientSchema } from '@aws-amplify/backend';
+import { studyCoach } from '../functions/study-coach/resource';
 
 const schema = a.schema({
   Course: a.model({
@@ -10,6 +11,7 @@ const schema = a.schema({
     professor: a.string().required(),
     color: a.string().required(),
     colorSource: a.string().required(),
+    confidence: a.integer(),
     
     owner: a.string().authorization(
       allow => [allow.owner().to(['read', 'delete'])]),
@@ -28,6 +30,11 @@ const schema = a.schema({
     owner: a.string().authorization(
       allow => [allow.owner().to(['read', 'delete'])]),
   }).authorization(allow => [allow.owner()]),
+  askStudyCoach: a.query()
+    .arguments({ message: a.string().required(), context: a.string().required() })
+    .returns(a.string())
+    .authorization(allow => [allow.authenticated()])
+    .handler(a.handler.function(studyCoach)),
 });
 
 export type Schema = ClientSchema<typeof schema>;

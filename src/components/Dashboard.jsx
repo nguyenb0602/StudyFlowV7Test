@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import CalendarView from './CalendarView.jsx';
+import StudyAssistant from './StudyAssistant.jsx';
 import CourseForm from './CourseForm.jsx';
 import EventForm from './EventForm.jsx';
 import EventsSection from './EventsSection.jsx';
@@ -164,7 +165,7 @@ export default function Dashboard({ user, onLogout }) {
       <aside className="sidebar">
         <div className="sidebar-brand">▣ StudyFlow</div>
         <nav aria-label="Main navigation" className="side-nav">
-          {['Dashboard', 'Courses', 'Events'].map((item) => (
+          {['Dashboard', 'Courses', 'Events', 'Study Assistant'].map((item) => (
             <button key={item} type="button" aria-current={page === item ? 'page' : undefined}
               className={`nav-link ${page === item ? 'active' : ''}`} onClick={() => setPage(item)}>{item}</button>
           ))}
@@ -178,7 +179,7 @@ export default function Dashboard({ user, onLogout }) {
         <header className="main-heading">
           <div>
             <h1>{page === 'Dashboard' ? `Welcome back, ${user.name.split(' ')[0]}!` : page}</h1>
-            <p className="muted">{page === 'Courses' ? 'View and manage your courses.' : page === 'Events' ? 'Browse every event and choose how to sort it.' : 'Keep track of your courses and events.'}</p>
+            <p className="muted">{page === 'Courses' ? 'View and manage your courses.' : page === 'Events' ? 'Browse every event and choose how to sort it.' : page === 'Study Assistant' ? 'Set your confidence and plan your study time.' : 'Keep track of your courses and events.'}</p>
           </div>
           <div className="top-actions">
             <button type="button" className="primary" disabled={!cloudReady || working} onClick={() => setDialog({ kind: 'course' })}>+ Add Course</button>
@@ -243,6 +244,8 @@ export default function Dashboard({ user, onLogout }) {
           </section>
         ) : page === 'Events' ? (
           <EventsSection events={events} courses={courses} onEventClick={openDetails} onEditEvent={editEvent} onDeleteEvent={deleteEvent} disabled={working} />
+        ) : page === 'Study Assistant' ? (
+          <StudyAssistant courses={courses} events={events} onSaveCourse={saveCourse} />
         ) : (
           <>
             <div className="dashboard-secondary-actions">

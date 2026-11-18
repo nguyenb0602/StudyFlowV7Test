@@ -1,4 +1,5 @@
 import { duplicateCourseMessage, findDuplicateCourse } from './courseIdentity.js';
+import { confidenceValue } from './studyPriorities.js';
 
 function checked(result, description) {
   if (result?.errors?.length) {
@@ -20,6 +21,7 @@ export function mapCourse(record) {
     professor: record.professor || '',
     color: record.color || '#2563eb',
     colorSource: record.colorSource || 'automatic',
+    confidence: confidenceValue(record.confidence),
   };
 }
 
@@ -85,6 +87,7 @@ export function createPlannerRepository(models) {
         professor: course.professor,
         color: course.color,
         colorSource: course.colorSource,
+        confidence: confidenceValue(course.confidence),
       };
       const result = editing
         ? await models.Course.update(payload)

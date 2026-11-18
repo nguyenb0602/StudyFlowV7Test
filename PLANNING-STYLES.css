@@ -1,0 +1,21 @@
+/* Append to src/styles.css */
+.study-section {display:grid;gap:1.15rem;max-width:1020px}
+.study-card {padding:1.25rem}
+.study-card h2 {margin-bottom:.4rem}
+.study-card .muted {line-height:1.55}
+.study-spotlight {background:#eff6ff;color:#163b74;border-left:4px solid #2463db;padding:1rem;line-height:1.65;margin:1rem 0}
+.study-ranked {padding-left:1.2rem;display:grid;gap:.8rem}
+.study-ranked li strong,.study-ranked li span {display:block}
+.study-ranked li span {font-size:.87rem;margin-top:.25rem}
+.study-confidence-list {display:grid;gap:.7rem}
+.study-confidence-row {display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.65rem 0;border-bottom:1px solid #e2e8f0}
+.study-confidence-row select {border:1px solid #a9b9cd;min-height:42px;min-width:94px;background:#fff;border-radius:6px;padding:.5rem}
+.study-chat {min-height:100px;display:grid;gap:.75rem;margin:1rem 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.study-message {padding:.85rem;background:#f5f7fa;border-radius:6px}
+.study-message.student {background:#e9f1ff}
+.study-message p {margin:.5rem 0 0;line-height:1.55}
+.study-chat-form {display:grid;gap:.6rem}
+.study-chat-form label {font-weight:600}
+.study-chat-form textarea {resize:vertical;max-width:100%;width:100%;font:inherit;padding:.75rem;border:1px solid #a9b9cd;border-radius:6px}
+.study-chat-form button {justify-self:start}
+@media(max-width:550px){.study-confidence-row {align-items:flex-start;flex-direction:column}}

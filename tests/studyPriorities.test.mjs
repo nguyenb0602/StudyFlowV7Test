@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {confidenceValue,daysUntil,studyPriorities,recommendationText,aiContext} from '../src/lib/studyPriorities.js';
+const courses=[{id:'c1',department:'CSCE',code:'3444',name:'Software Engineering',confidence:2},{id:'c2',department:'MATH',code:'1710',name:'Calculus',confidence:4}];
+const events=[{id:'e1',courseId:'c1',title:'Exam',type:'Exam',date:'2026-11-20'},{id:'e2',courseId:'c2',title:'Homework',type:'Assignment',date:'2026-11-23'}];
+test('valid confidence falls in range and defaults otherwise',()=>{assert.equal(confidenceValue(5),5);assert.equal(confidenceValue(0),3);assert.equal(confidenceValue(12),3)});
+test('date math uses calendar dates and leap years',()=>{assert.equal(daysUntil('2028-02-29','2028-02-28'),1);assert.equal(daysUntil('2026-02-30','2026-02-28'),null);});
+test('deadline and low confidence lift study priority',()=>{assert.equal(studyPriorities(courses,events,'2026-11-17')[0].course.id,'c1');});
+test('past deadlines excluded',()=>{assert.equal(studyPriorities(courses,events,'2026-12-01').length,0);});
+test('missing course does not produce priority',()=>{assert.equal(studyPriorities([],events,'2026-11-17').length,0);});
+test('recommendation does not claim to have created calendar events',()=>{assert.match(recommendationText(studyPriorities(courses,events,'2026-11-17')[0]),/Focus on/);});
+test('context only includes approaching events',()=>{assert.equal(JSON.parse(aiContext(courses,events,'2026-11-17')).upcomingEvents.length,2)});

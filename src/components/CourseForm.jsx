@@ -32,6 +32,7 @@ export default function CourseForm({ initialCourse, onSave, onCancel }) {
       professor: form.professor.trim(),
       color: form.pickColor ? form.color : null,
       colorSource: form.pickColor ? 'custom' : 'automatic',
+      confidence: initialCourse?.confidence ?? 3,
     };
     if ([course.name, course.department, course.code, course.section, course.professor].some((v) => !v)) return;
     setSaving(true);
