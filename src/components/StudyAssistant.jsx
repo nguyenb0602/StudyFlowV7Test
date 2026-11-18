@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {aiContext,confidenceValue,recommendationText,studyPriorities} from '../lib/studyPriorities.js';
+import {aiContext,confidenceValue,recommendationText,studyPlan,studyPriorities} from '../lib/studyPriorities.js';
 import {askStudyCoach} from '../lib/studyCoachClient.js';
 import {todayKey} from '../lib/dates.js';
 
@@ -41,10 +41,15 @@ export default function StudyAssistant({courses,events,onSaveCourse}) {
         {priorities.length ? <>
           <p role="status" className="study-spotlight">{recommendationText(priorities[0])}</p>
           <ol className="study-ranked">
-            {priorities.map(({event,course,days,confidence})=><li key={event.id}>
-              <strong>{course.department} {course.code}: {event.title}</strong>
-              <span className="muted">{event.type} · {days===0?'Today':days===1?'Tomorrow':`${days} days away`} · Confidence {confidence}/5</span>
-            </li>)}
+            {priorities.map((priority) => {
+              const {event,course,days,confidence} = priority;
+              const plan = studyPlan(priority);
+              return <li key={event.id}>
+                <strong>{course.department} {course.code}: {event.title}</strong>
+                <span className="muted">{event.type} · {days===0?'Today':days===1?'Tomorrow':`${days} days away`} · Confidence {confidence}/5</span>
+                <span className="muted">Suggested: {plan.totalMinutes} min focused work · {plan.focus}</span>
+              </li>;
+            })}
           </ol>
         </>:<p className="empty-state">Add an upcoming course event to see priorities here.</p>}
       </div>
