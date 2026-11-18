@@ -1,6 +1,4 @@
-// Framework-neutral repository: each operation goes to the Amplify Data API.
-// Keeping these functions separate makes it possible to test CRUD without
-// deploying AWS resources or installing any browser test framework.
+import { duplicateCourseMessage, findDuplicateCourse } from './courseIdentity.js';
 
 function checked(result, description) {
   if (result?.errors?.length) {
@@ -61,6 +59,23 @@ export function createPlannerRepository(models) {
     },
 
     async saveCourse(course, editing) {
+      let nextToken = null;
+      do {
+        const page = await models.Course.list({
+          limit: 100,
+          ...(nextToken ? { nextToken } : {}),
+        });
+        if (page?.errors?.length) {
+          throw new Error(`Checking existing courses: ${page.errors.map(e => e.message || String(e)).join('; ')}`);
+        }
+        if (!page || !Array.isArray(page.data)) {
+          throw new Error('Could not check existing courses. Please try again.');
+        }
+        const duplicate = findDuplicateCourse(page.data, course);
+        if (duplicate) throw new Error(duplicateCourseMessage(duplicate));
+        nextToken = page.nextToken || null;
+      } while (nextToken);
+
       const payload = {
         id: course.id,
         name: course.name,
@@ -120,8 +135,6 @@ export function createPlannerRepository(models) {
         ids.push(...(response.data || []).map(event => event.id));
         token = response.nextToken || null;
       } while (token);
-      // Delete child events first. If any deletion fails, preserve the course
-      // so the user can retry without orphaning the remaining records.
       for (const eventId of ids) {
         checked(await models.Event.delete({ id: eventId }), 'Deleting linked event');
       }
